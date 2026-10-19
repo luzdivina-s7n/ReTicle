@@ -161,7 +161,6 @@ namespace RTC
         [DllImport("user32.dll")] public static extern int GetSystemMetrics(int nIndex);
         [DllImport("user32.dll")] public static extern bool GetCursorPos(out POINT lpPoint);
         [DllImport("user32.dll")] public static extern bool SetForegroundWindow(IntPtr hWnd);
-        [DllImport("user32.dll")] public static extern bool PostMessageW(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
         [DllImport("shell32.dll", CharSet = CharSet.Unicode)] public static extern uint ExtractIconExW(string lpszFile, int nIconIndex, out IntPtr phiconLarge, out IntPtr phiconSmall, uint nIcons);
         [DllImport("user32.dll")] public static extern bool DestroyIcon(IntPtr hIcon);
         [DllImport("user32.dll")] public static extern IntPtr LoadIconW(IntPtr hInstance, IntPtr lpIconName);
@@ -339,7 +338,6 @@ namespace RTC
 
             Native.SetForegroundWindow(_hwnd);
             int cmd = Native.TrackPopupMenu(menu, Native.TPM_RIGHTBUTTON | Native.TPM_RETURNCMD, pt.X, pt.Y, 0, _hwnd, IntPtr.Zero);
-            Native.PostMessageW(_hwnd, 0, IntPtr.Zero, IntPtr.Zero);
             Native.DestroyMenu(menu);
 
             switch (cmd)
@@ -481,9 +479,9 @@ namespace RTC
                     else
                     {
                         float a = aa * inv;
-                        px[i] = (byte)(ab * inv);
-                        px[i + 1] = (byte)(ag * inv);
-                        px[i + 2] = (byte)(ar * inv);
+                        px[i] = (byte)(ab * inv * a);
+                        px[i + 1] = (byte)(ag * inv * a);
+                        px[i + 2] = (byte)(ar * inv * a);
                         px[i + 3] = (byte)(a * 255f);
                     }
                     i += 4;
